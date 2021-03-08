@@ -3,7 +3,8 @@ package kz.aitu.cinemasystem;
 import kz.aitu.cinemasystem.controls.FIlmControls;
 import kz.aitu.cinemasystem.controls.CinemaControls;
 import kz.aitu.cinemasystem.controls.SessionControls;
-import kz.aitu.cinemasystem.controls.adminControls;
+import kz.aitu.cinemasystem.controls.AdminControls;
+import kz.aitu.cinemasystem.controls.ClientControls;
 
 import java.sql.Time;
 import java.util.InputMismatchException;
@@ -11,17 +12,21 @@ import java.util.Scanner;
 
 public class Application {
     private final SessionControls sessionControls;
-    private final adminControls adminControls;
+    private final AdminControls adminControls;
     private final FIlmControls filmControls;
     private final CinemaControls cinemaControls;
+    private final ClientControls clientControls;
 
     private final Scanner scanner;
 
-    public Application(SessionControls sessionControls, adminControls adminControls, FIlmControls filmControls, CinemaControls cinemaControls){ //it is concructor with controls
+
+
+    public Application(SessionControls sessionControls, AdminControls adminControls, FIlmControls filmControls, CinemaControls cinemaControls, ClientControls clientControls){ //it is concructor with controls
         this.sessionControls = sessionControls;
         this.adminControls = adminControls;
         this.filmControls = filmControls;
         this.cinemaControls = cinemaControls;
+        this.clientControls = clientControls;
         scanner = new Scanner(System.in);
     }
 
@@ -83,7 +88,7 @@ public class Application {
                 else if(option ==2){
                     checkPassword();
                     while(checkPassword()==false){
-                        System.out.println("You entered the wrong data!");
+
                         checkPassword();
                     }
                     System.out.println("Welcome to the system.");
@@ -188,6 +193,9 @@ public class Application {
         System.out.println("Enter password");
         String password = scanner.next();
         boolean response = adminControls.checkPassword(login, password);
+        if(response==false){
+            System.out.println("You entered the wrong data!");
+        }
         return response;
     }
     public void addNewAdmin(){
@@ -360,26 +368,32 @@ public class Application {
     public void getAllSessionByTitle(){
         System.out.println("Please enter a Title of Movie");
         String title = scanner.next();
-        String response_for_deleted = filmControls.deleteMovie(ID);
-        System.out.println(response_for_deleted);
+        String response = clientControls.getAllSessionByTitle(title);
+        System.out.println(response);
     }
     public void getAllSessionByCinema(){
         System.out.println("Please enter a Title of Cinema Theater");
         String title = scanner.next();
+        String response = clientControls.getAllSessionByCinema(title);
+        System.out.println(response);
     }
 
     public void getAllSession(){
-
+        String response = clientControls.getAllSession();
+        System.out.println(response);
     }
     public void getAllMovies(){
-
+        String response = filmControls.getAllMovies();
+        System.out.println(response);
     }
     public void getAllTheater(){
-
-
+        String response = cinemaControls.getAllMovies();
+        System.out.println(response);
     }
-    public void buyTicket(){
 
+    public void buyTicket(){
+        String buyTicket = clientControls.buyTicket();
+        System.out.println(buyTicket);
     }
 
 }

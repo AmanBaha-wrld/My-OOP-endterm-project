@@ -21,7 +21,7 @@ public class AdminOrder implements AdminRepositories {
             String sql = "SELECT * FROM admins WHERE login=? AND password=?";
             PreparedStatement st = con.prepareStatement(sql);
             st.setString(1,login);
-            st.setString(1,password);
+            st.setString(2,password);
             st.execute();
             return true;
         } catch (SQLException throwables) {
@@ -45,7 +45,7 @@ public class AdminOrder implements AdminRepositories {
             String sql = "INSERT INTO admins(login, password) VALUES(?,?)";
             PreparedStatement st = con.prepareStatement(sql);
             st.setString(1,login);
-            st.setString(1,password);
+            st.setString(2,password);
             st.execute();
             return true;
         } catch (SQLException throwables) {

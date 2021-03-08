@@ -209,13 +209,13 @@ public class SessionOrder implements SessionRepositories {
         return false;
     }
     @Override
-    public boolean deleteAllSessionByHall(int price) {
+    public boolean deleteAllSessionByHall(int ID) {
         Connection con = null;
         try {
             con = db.getConnection();
             String sql = "DELETE FROM f_session WHERE hall_id = ?";
             PreparedStatement st = con.prepareStatement(sql);
-            st.setInt(1,salary);
+            st.setInt(1,ID);
             st.execute();
             return true;
         } catch (SQLException throwables) {
@@ -261,7 +261,7 @@ public class SessionOrder implements SessionRepositories {
             con = db.getConnection();
             String sql = "DELETE FROM f_session WHERE price>?";
             PreparedStatement st = con.prepareStatement(sql);
-            st.setInt(1,price;
+            st.setInt(1,price);
             st.execute();
             return true;
         } catch (SQLException throwables) {

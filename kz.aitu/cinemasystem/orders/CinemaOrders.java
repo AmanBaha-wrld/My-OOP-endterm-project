@@ -3,10 +3,11 @@ package kz.aitu.cinemasystem.orders;
 import kz.aitu.cinemasystem.connection.DInterface.DInteface;
 import kz.aitu.cinemasystem.orders.repositories.CinemaRepositories;
 import kz.aitu.cinemasystem.records.Cinema;
+import kz.aitu.cinemasystem.records.Film;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class CinemaOrders implements CinemaRepositories {
     private final DInteface db;
@@ -61,5 +62,37 @@ public class CinemaOrders implements CinemaRepositories {
             }
         }
         return false;
+    }
+    @Override
+    public List<Cinema> getAllMovies() {
+        Connection con = null;
+        try {
+            con = db.getConnection();
+            String sql = "SELECT * FROM cinema";
+            Statement st = con.createStatement();
+
+            ResultSet rs = st.executeQuery(sql);
+            List<Cinema> cinemaList = new LinkedList<>();
+            while(rs.next()){
+                Cinema cinema = new Cinema(rs.getInt("cinema_id"),
+                        rs.getString("title"),
+                        rs.getString("addres")
+                );
+
+                cinemaList.add(cinema);
+            }
+            return cinemaList;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                con.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        return null;
     }
 }

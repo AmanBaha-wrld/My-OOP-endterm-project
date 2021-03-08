@@ -19,6 +19,7 @@ public class Film {
         setDuration(duration);
     }
 
+
     public void setFilm_id(int film_id){this.film_id = film_id;}
     public void setTitle(String title){this.title = title;}
     public void setDuration(Time duration){this.duration=duration;}
@@ -35,8 +36,9 @@ public class Film {
     public String toString() {
         return "Film: {" +
                 "Film ID = " + film_id + "\n" +
-                "Title = '" + title + "'\n" +
+                "Title = " + title + "\n" +
                 "Duration = '" + duration + "'\n" +
                 "}";
     }
+
 }

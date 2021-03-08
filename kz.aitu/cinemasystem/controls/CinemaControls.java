@@ -3,6 +3,8 @@ package kz.aitu.cinemasystem.controls;
 import kz.aitu.cinemasystem.orders.repositories.CinemaRepositories;
 import kz.aitu.cinemasystem.records.Cinema;
 
+import java.util.List;
+
 public class CinemaControls {
     private final CinemaRepositories repo;
 
@@ -16,5 +18,9 @@ public class CinemaControls {
     public String deleteCinemaTheater(int ID){
         boolean created = repo.deleteCinemaTheater(ID);
         return (created ? "The cinema deleted!" : "Please enter the correct data! ");
+    }
+    public String getAllMovies(){
+        List<Cinema> cinemas = repo.getAllMovies();
+        return cinemas.toString();
     }
 }

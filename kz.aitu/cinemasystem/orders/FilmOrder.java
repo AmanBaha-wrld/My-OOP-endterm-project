@@ -2,12 +2,12 @@ package kz.aitu.cinemasystem.orders;
 
 import kz.aitu.cinemasystem.connection.DInterface.DInteface;
 import kz.aitu.cinemasystem.orders.repositories.FilmRepositories;
+import kz.aitu.cinemasystem.records.Client;
 import kz.aitu.cinemasystem.records.Film;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Time;
+import java.sql.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class FilmOrder implements FilmRepositories {
     private final DInteface db;
@@ -20,7 +20,7 @@ public class FilmOrder implements FilmRepositories {
         Connection con = null;
         try {
             con = db.getConnection();
-            String sql = "INSERT INTO film(title, addres) VALUES(?,?)";
+            String sql = "INSERT INTO film(title, duration) VALUES(?,?)";
             PreparedStatement st = con.prepareStatement(sql);
             st.setString(1, title);
             st.setTime(2, duration);
@@ -62,4 +62,37 @@ public class FilmOrder implements FilmRepositories {
         }
         return false;
     }
+    @Override
+    public List<Film> getAllMovies() {
+        Connection con = null;
+        try {
+            con = db.getConnection();
+            String sql = "SELECT * FROM film";
+            Statement st = con.createStatement();
+
+            ResultSet rs = st.executeQuery(sql);
+            List<Film> filmList = new LinkedList<>();
+            while(rs.next()){
+                Film film = new Film(rs.getInt("film_id"),
+                        rs.getString("title"),
+                        rs.getTime("duration")
+                );
+
+                filmList.add(film);
+            }
+            return filmList;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                con.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        return null;
+    }
+
 }

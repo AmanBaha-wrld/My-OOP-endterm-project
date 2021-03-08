@@ -4,13 +4,12 @@ import kz.aitu.cinemasystem.orders.repositories.FilmRepositories;
 import kz.aitu.cinemasystem.records.Film;
 
 import java.sql.Time;
+import java.util.List;
 
 public class FIlmControls {
     private final FilmRepositories repo;
 
     public FIlmControls(FilmRepositories repo){this.repo=repo;}
-
-
     public String deleteMovie(int ID){
         boolean deleted = repo.deleteMovie(ID);
         return (deleted ? "Successfully deleted!" : "Please enter the correct data!");
@@ -18,6 +17,10 @@ public class FIlmControls {
     public String addMovie(String title, Time duration){
         boolean add = repo.addMovie(title, duration);
         return (add ? "Successfully added!" : "Please enter the correct data!");
+    }
+    public String getAllMovies(){
+        List<Film> films = repo.getAllMovies();
+        return films.toString();
     }
 
 }
