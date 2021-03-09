@@ -16,8 +16,9 @@ public interface SessionRepositories {
     boolean increaseAllPrice(int ID);
     boolean decreaseOnePrice(int ID, int price);
     boolean increaseOnePrice(int ID, int price);
-
+    int getPrice(int ID);
     boolean deleteAllSessionByEqualPrice(int price);
     boolean deleteAllSessionByMorePrice(int price);
     boolean deleteAllSessionByLessPrice(int price);
+
 }

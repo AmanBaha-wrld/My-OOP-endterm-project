@@ -183,7 +183,6 @@ public class Application {
             } catch (Exception e){
                 System.out.println(e.getMessage());
             }
-            System.out.println("Hello my friend!");
         }
     }
 

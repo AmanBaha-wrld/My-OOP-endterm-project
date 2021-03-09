@@ -6,8 +6,6 @@ import kz.aitu.cinemasystem.controls.*;
 import kz.aitu.cinemasystem.orders.*;
 import kz.aitu.cinemasystem.orders.repositories.*;
 
-import java.util.Scanner;
-
 public class main {
     public static void main(String[] args) {
         DInteface db = new DConnection();
@@ -25,7 +23,7 @@ public class main {
         AdminControls adminControls = new AdminControls(adminRepositories);
 
         ClientRepositories clientRepositories = new ClientOrder(db);
-        ClientControls clientControls = new ClientControls(clientRepositories, fIlmControls);
+        ClientControls clientControls = new ClientControls(clientRepositories, fIlmControls, sessionControls);
 
         Application app = new Application(sessionControls, adminControls, fIlmControls, cinemaControls, clientControls);
         app.start();

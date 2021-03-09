@@ -66,5 +66,9 @@ public class SessionControls {
         boolean deleteCinemaTheater = repo.deleteCinemaTheater(ID);
         return (deleteCinemaTheater ? "Successfully deleted!" : "Please enter the correct data!");
     }
+    public int getPrice(int ID){
+        int price = repo.getPrice(ID);
+        return price;
+    }
 
 }

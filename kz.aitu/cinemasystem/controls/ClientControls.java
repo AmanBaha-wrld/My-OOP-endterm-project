@@ -2,10 +2,8 @@ package kz.aitu.cinemasystem.controls;
 
 import kz.aitu.cinemasystem.orders.repositories.ClientRepositories;
 import kz.aitu.cinemasystem.records.Client;
-import kz.aitu.cinemasystem.controls.FIlmControls;
 
 import java.sql.Time;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,10 +11,12 @@ public class ClientControls {
     private Scanner scanner;
     private final ClientRepositories repo;
     private final FIlmControls fIlmControls;
+    private final SessionControls sessionControls;
 
-    public ClientControls(ClientRepositories repo, FIlmControls fIlmControls){
+    public ClientControls(ClientRepositories repo, FIlmControls fIlmControls, SessionControls sessionControls){
         this.repo=repo;
         this.fIlmControls = fIlmControls;
+        this.sessionControls = sessionControls;
         scanner = new Scanner(System.in);
     }
 
@@ -36,8 +36,8 @@ public class ClientControls {
         List<Client> clients = repo.getAllSession();
         return clients.toString();
     }
-    public String buyTicket() {
-        String buy="buy";
+
+    public String titleOrList(){
         boolean prime=true;
         while(prime==true){
             System.out.println("Please select your option");
@@ -49,8 +49,7 @@ public class ClientControls {
                 String title = scanner.next();
                 boolean response = getAllSessionByTitleBoolean(title);
                 if(response==true){
-                    String Time = getFromTime(title);
-                    System.out.println(Time);
+                    return title;
                 }
                 else {
                     System.out.println("You entered the wrong value!");
@@ -61,10 +60,25 @@ public class ClientControls {
                 System.out.println(response);
             }
         }
-        return buy;
+        return null;
     }
-    public String getFromTime(String title){
-        String buy="buy";
+    public String buyTicket() {
+        String title = titleOrList();
+        timeOrList(title);
+        System.out.println("Please enter a Session ID");
+        int ID = scanner.nextInt();
+        int price = getPrice(ID);
+        String select = ("You have selected a session: \n" + selectSession(ID));
+        int generalPrice = getGeneralPrice(price);
+        String stPrice = ("Total price: " + generalPrice);
+        String total = (select + "\n" + stPrice);
+        return total;
+    }
+    public String selectSession(int ID){
+        String session = repo.selectSession(ID);
+        return session.toString();
+    }
+    public void timeOrList(String title){
         boolean prime=true;
         System.out.println("Please select your option");
         System.out.println("1. Enter a convenient time");
@@ -79,8 +93,7 @@ public class ClientControls {
                 System.out.println("Enter the finish time");
                 f_time= Time.valueOf(scanner.next());
                 if(f_time.compareTo(s_time)>0){
-                    System.out.println("f_time.compareTo(s_time)>0"); // правильное
-                    String getTime = getTime(s_time, f_time);
+                    String getTime = getTime(title, s_time, f_time);
                     System.out.println(getTime);
                     prime=false;
                 }
@@ -91,26 +104,43 @@ public class ClientControls {
         else if(option == 2){
             String response = getAllSessionByTitle(title);
             System.out.println(response);
-            System.out.println("Please enter a Session ID"); //сделать проверку session ID
-            int ID = scanner.nextInt();
-            String price = getPrice(ID);
-            System.out.println(price);
         }
-    return buy;
     }
-    public String getTime(Time s_time, Time f_time){
-        String buy="buy";
-        boolean prime=true;
-        
-        return buy;
+    public int getPrice(int ID){
+        int price = sessionControls.getPrice(ID);
+        return  price;
     }
-    public String getPrice(int ID){
-        String buy="buy";
-        boolean prime=true;
-        while(prime){
-
+    public String getTime(String title, Time s_time, Time f_time){
+        List<Client> clients = repo.getTime(title, s_time, f_time);
+        return clients.toString();
+    }
+    public int getGeneralPrice(int price){
+        int generalPrice=0;
+        System.out.println("How many of you are there?");
+        int people = scanner.nextInt();
+        if(people==1)
+            System.out.println("Don't worry, you'll find someone to watch a movie with!");
+        System.out.println("Choose discount: \n 1 - Without the discount \n 2 - Child (40%) \n 3 - Student (20%) \n 4 - Older person (20%)");
+        for(int i=1; i<=people; i++){
+            System.out.println("Choose discount for " + i);
+            int discount = scanner.nextInt();
+            if(discount==1){
+                generalPrice+=price;
+            }
+            else if(discount==2){
+                generalPrice+=price*0.6;
+            }
+            else if(discount==3){
+                generalPrice+=price*0.8;
+            }
+            else if(discount==4){
+                generalPrice+=price*0.8;
+            }
+            else if(discount>4){
+                System.out.println("You have selected the wrong number, please enter it again.");
+            }
         }
-        return buy;
+        return generalPrice;
     }
 
 }

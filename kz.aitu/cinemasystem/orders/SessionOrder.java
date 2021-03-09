@@ -4,10 +4,7 @@ import kz.aitu.cinemasystem.orders.repositories.SessionRepositories;
 import kz.aitu.cinemasystem.connection.DInterface.DInteface;
 import kz.aitu.cinemasystem.records.Session;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 
 public class SessionOrder implements SessionRepositories {
@@ -299,6 +296,34 @@ public class SessionOrder implements SessionRepositories {
             }
         }
         return false;
+    }
+    @Override
+    public int getPrice(int ID) {
+        Connection con = null;
+        try {
+            int price;
+            con = db.getConnection();
+            String sql = "SELECT price FROM f_session WHERE session_id = ?";
+            PreparedStatement st = con.prepareStatement(sql);
+            st.setInt(1,ID);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                price =(rs.getInt("price")
+                );
+                return price;
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }finally{
+            try {
+                con.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        }
+        return 0;
     }
 
 }
